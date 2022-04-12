@@ -1,6 +1,11 @@
+import pytest
+
 from .base_page import BasePage
 from .locators import MainPageLocators
-from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
 
@@ -8,10 +13,10 @@ class ProductPage(BasePage):
     def put_to_basket(self):
         add_link = self.browser.find_element(*MainPageLocators.ADD_LINK)
         add_link.click()
-        time.sleep(2)
-        solve = BasePage(self.browser, self.browser.switch_to.alert)
-        solve.solve_quiz_and_get_code()
-        time.sleep(2)
+        time.sleep(5)
+       # solve = BasePage(self.browser, self.browser.switch_to.alert)
+       # solve.solve_quiz_and_get_code()
+       # time.sleep(2)
 
     def should_be_in_basket(self):
         check1 = self.browser.find_element_by_css_selector(
@@ -28,5 +33,34 @@ class ProductPage(BasePage):
             'p.price_color')
         assert check1.text == check2.text, 'The prices are not equal'
 
+    def is_not_element_present(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return True
 
+        return False
+
+    def is_disappeared(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException).\
+                until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+
+        return True
+
+    @pytest.mark.xfail
+    def test_guest_cant_see_success_message_after_adding_product_to_basket(self):
+        assert self.is_not_element_present(*MainPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    def test_guest_cant_see_success_message(self):
+        assert self.is_not_element_present(*MainPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    @pytest.mark.xfail
+    def test_message_disappeared_after_adding_product_to_basket(self):
+        assert self.is_disappeared(*MainPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
 
