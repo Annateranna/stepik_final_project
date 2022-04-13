@@ -15,3 +15,12 @@ class BasePageLocators():
     SUCCESS_MESSAGE = (By.CSS_SELECTOR, "div.alertinner > strong")
     BASKET_ITEMS = (By.XPATH, "//*[@id='basket_formset']/div/div")
     EMPTY_MESSAGE = (By.XPATH, "//*[@id='content_inner']/p/text()")
+    USER_ICON = (By.CSS_SELECTOR, ".icon-user")
+
+
+class LoginPageLocators():
+    EMAIL_FIELD = (By.CSS_SELECTOR, "#id_registration-email")
+    PASSWORD_FIELD = (By.CSS_SELECTOR, "#id_registration-password1")
+    CONFIRM_FIELD = (By.CSS_SELECTOR, "#id_registration-password2")
+    REGISTER_BUTTON = (By.CSS_SELECTOR, "[value = 'Register']")
+    ALL_ITEMS = (By.XPATH, "//*[@id='browse']/li/ul/li[1]/a")

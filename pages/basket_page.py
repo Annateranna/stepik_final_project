@@ -1,9 +1,5 @@
-import pytest
-
-from . import base_page
 from .base_page import BasePage
 from .locators import BasePageLocators
-# from selenium.webdriver.common.by import By
 import time
 
 
